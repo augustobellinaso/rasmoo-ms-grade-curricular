@@ -13,5 +13,5 @@ public interface IMateriaService {
 
     List<MateriaEntity> listarTodas();
 
-    MateriaEntity listaMateriaPorId(final Long id);
+    MateriaEntity consultar(final Long id);
 }

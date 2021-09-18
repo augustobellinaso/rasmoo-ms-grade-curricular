@@ -56,7 +56,7 @@ public class MateriaService implements IMateriaService{
     }
 
     @Override
-    public MateriaEntity listaMateriaPorId(Long id) {
+    public MateriaEntity consultar(Long id) {
         return this.materiaRepository.findById(id).get();
     }
 }
