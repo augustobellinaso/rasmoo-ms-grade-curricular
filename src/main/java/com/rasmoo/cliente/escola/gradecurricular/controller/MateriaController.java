@@ -7,10 +7,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.rasmoo.cliente.escola.gradecurricular.entity.MateriaEntity;
 import com.rasmoo.cliente.escola.gradecurricular.repository.IMateriaRepository;
+import com.rasmoo.cliente.escola.gradecurricular.service.IMateriaService;
 
 @RestController
 @RequestMapping(path = "/materia")
 public class MateriaController {
+
+    @Autowired
+    private IMateriaService materiaService;
 
     @Autowired
     private IMateriaRepository materiaRepository;
@@ -27,38 +31,17 @@ public class MateriaController {
 
     @PostMapping
     public ResponseEntity<Boolean> cadastrarMateria(@RequestBody MateriaEntity materia) {
-        try {
-            this.materiaRepository.save(materia);
-            return ResponseEntity.status(HttpStatus.OK).body(true);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.OK).body(false);
-        }
+        return ResponseEntity.status(HttpStatus.OK).body(this.materiaService.cadastrar(materia));
     }
 
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<Boolean> excluirMateria(@PathVariable Long id) {
-        try {
-            this.materiaRepository.deleteById(id);
-            return ResponseEntity.status(HttpStatus.OK).body(true);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.OK).body(false);
-        }
+        return ResponseEntity.status(HttpStatus.OK).body(this.materiaService.excluir(id));
     }
 
     @PutMapping
     public ResponseEntity<Boolean> atualizarMateria(@RequestBody MateriaEntity materia) {
-        try {
-            MateriaEntity materiaAtualizada = this.materiaRepository.findById(materia.getId()).get();
-            materiaAtualizada.setNome(materia.getNome());
-            materiaAtualizada.setCodigo(materia.getCodigo());
-            materiaAtualizada.setFrequencia(materia.getFrequencia());
-            materiaAtualizada.setHoras(materia.getHoras());
-
-            this.materiaRepository.save(materia);
-            return ResponseEntity.status(HttpStatus.OK).body(true);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.OK).body(false);
-        }
+        return ResponseEntity.status(HttpStatus.OK).body(this.materiaService.atualizar(materia));
     }
 
 }
