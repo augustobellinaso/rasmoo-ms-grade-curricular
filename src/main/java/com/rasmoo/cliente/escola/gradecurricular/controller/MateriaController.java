@@ -6,7 +6,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.rasmoo.cliente.escola.gradecurricular.entity.MateriaEntity;
-import com.rasmoo.cliente.escola.gradecurricular.repository.IMateriaRepository;
 import com.rasmoo.cliente.escola.gradecurricular.service.IMateriaService;
 
 @RestController
@@ -16,22 +15,19 @@ public class MateriaController {
     @Autowired
     private IMateriaService materiaService;
 
-    @Autowired
-    private IMateriaRepository materiaRepository;
-
     @GetMapping
     public ResponseEntity<List<MateriaEntity>> listaMaterias() {
-        return ResponseEntity.status(HttpStatus.OK).body(this.materiaRepository.findAll());
+        return ResponseEntity.status(HttpStatus.OK).body(this.materiaService.listarTodas());
     }
 
     @GetMapping(path = "/{id}")
     public ResponseEntity<MateriaEntity> consultaMateria(@PathVariable Long id) {
-        return ResponseEntity.status(HttpStatus.OK).body(this.materiaRepository.findById(id).get());
+        return ResponseEntity.status(HttpStatus.OK).body(this.materiaService.consultar(id));
     }
 
     @PostMapping
     public ResponseEntity<Boolean> cadastrarMateria(@RequestBody MateriaEntity materia) {
-        return ResponseEntity.status(HttpStatus.OK).body(this.materiaService.cadastrar(materia));
+        return ResponseEntity.status(HttpStatus.CREATED).body(this.materiaService.cadastrar(materia));
     }
 
     @DeleteMapping(path = "/{id}")
