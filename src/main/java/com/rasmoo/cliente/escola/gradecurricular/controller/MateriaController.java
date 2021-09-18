@@ -27,7 +27,7 @@ public class MateriaController {
 
     @PostMapping
     public ResponseEntity<Boolean> cadastrarMateria(@RequestBody MateriaEntity materia) {
-        return ResponseEntity.status(HttpStatus.OK).body(this.materiaService.cadastrar(materia));
+        return ResponseEntity.status(HttpStatus.CREATED).body(this.materiaService.cadastrar(materia));
     }
 
     @DeleteMapping(path = "/{id}")
