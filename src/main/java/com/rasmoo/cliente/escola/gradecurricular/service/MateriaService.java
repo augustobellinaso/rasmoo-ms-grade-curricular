@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import com.rasmoo.cliente.escola.gradecurricular.entity.MateriaEntity;
+import com.rasmoo.cliente.escola.gradecurricular.exception.MateriaException;
 import com.rasmoo.cliente.escola.gradecurricular.repository.IMateriaRepository;
 
 @Service
@@ -19,32 +20,35 @@ public class MateriaService implements IMateriaService {
     @Override
     public Boolean atualizar(MateriaEntity materia) {
         try {
-            Optional<MateriaEntity> materiaOptional = this.materiaRepository.findById(materia.getId());
+            MateriaEntity materiaAtualizada = this.consultar(materia.getId());
 
-            if (materiaOptional.isPresent()) {
-                MateriaEntity materiaAtualizada = materiaOptional.get();
-                materiaAtualizada.setNome(materia.getNome());
-                materiaAtualizada.setCodigo(materia.getCodigo());
-                materiaAtualizada.setFrequencia(materia.getFrequencia());
-                materiaAtualizada.setHoras(materia.getHoras());
+            materiaAtualizada.setNome(materia.getNome());
+            materiaAtualizada.setCodigo(materia.getCodigo());
+            materiaAtualizada.setFrequencia(materia.getFrequencia());
+            materiaAtualizada.setHoras(materia.getHoras());
 
-                this.materiaRepository.save(materia);
-                return true;
-            }
-            return false;
+            this.materiaRepository.save(materia);
 
+
+            return Boolean.TRUE;
+
+        } catch (MateriaException m) {
+            throw m;
         } catch (Exception e) {
-            return false;
+            throw e;
         }
     }
 
     @Override
     public Boolean excluir(Long id) {
         try {
+            this.consultar(id);
             this.materiaRepository.deleteById(id);
             return true;
+        } catch (MateriaException m) {
+            throw m;
         } catch (Exception e) {
-            return false;
+            throw e;
         }
     }
 
@@ -71,9 +75,12 @@ public class MateriaService implements IMateriaService {
     public MateriaEntity consultar(Long id) {
         try {
             Optional<MateriaEntity> materiaOptional = this.materiaRepository.findById(id);
-            return materiaOptional.orElse(null);
+            return materiaOptional.orElseThrow(() -> new MateriaException("Matéria não encontrada", HttpStatus.NOT_FOUND));
+
+        } catch (MateriaException m) {
+            throw m;
         } catch (Exception e) {
-            return null;
+            throw new MateriaException("Erro interno identificado. Contate o suporte", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

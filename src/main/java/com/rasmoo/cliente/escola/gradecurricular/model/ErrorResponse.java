@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Builder
 @Getter
-public class ErroResponse {
+public class ErrorResponse {
 
     private String mensagem;
     private int httpStatus;
