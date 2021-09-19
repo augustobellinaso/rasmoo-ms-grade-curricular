@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -30,6 +32,7 @@ public class MateriaService implements IMateriaService {
     }
 
     @Override
+    @CacheEvict(value = "materia", key="#materia.id")
     public Boolean atualizar(MateriaDTO materia) {
         try {
             this.consultar(materia.getId());
@@ -80,6 +83,7 @@ public class MateriaService implements IMateriaService {
     }
 
     @Override
+    @Cacheable(value = "materia", key = "#id")
     public MateriaDTO consultar(Long id) {
         try {
             Optional<MateriaEntity> materiaOptional = this.materiaRepository.findById(id);
