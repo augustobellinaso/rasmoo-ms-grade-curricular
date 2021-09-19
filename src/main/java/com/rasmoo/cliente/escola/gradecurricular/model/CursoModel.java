@@ -3,7 +3,6 @@ package com.rasmoo.cliente.escola.gradecurricular.model;
 import java.util.List;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import com.rasmoo.cliente.escola.gradecurricular.dto.MateriaDTO;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -21,5 +20,5 @@ public class CursoModel {
     @Size(min = 2, max = 5)
     private String codCurso;
 
-    private List<MateriaDTO> materias;
+    private List<Long> materias;
 }
