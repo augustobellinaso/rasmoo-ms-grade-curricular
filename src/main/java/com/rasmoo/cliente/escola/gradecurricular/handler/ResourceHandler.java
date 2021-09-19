@@ -9,21 +9,28 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import com.rasmoo.cliente.escola.gradecurricular.exception.MateriaException;
+import com.rasmoo.cliente.escola.gradecurricular.model.ErrorMapResponse;
+import com.rasmoo.cliente.escola.gradecurricular.model.ErrorMapResponse.ErrorMapResponseBuilder;
 import com.rasmoo.cliente.escola.gradecurricular.model.ErrorResponse;
 import com.rasmoo.cliente.escola.gradecurricular.model.ErrorResponse.ErrorResponseBuilder;
+
 
 @ControllerAdvice
 public class ResourceHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, String>> handlerMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
+    public ResponseEntity<ErrorMapResponse> handlerMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
+                Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getAllErrors().forEach(error -> {
             String campo = ((FieldError) error).getField();
             String mensagem = error.getDefaultMessage();
             errors.put(campo, mensagem);
         });
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
+        ErrorMapResponseBuilder errorMap = ErrorMapResponse.builder();
+        errorMap.errors(errors)
+                .httpStatus(HttpStatus.BAD_REQUEST.value())
+                .timeStamp(System.currentTimeMillis());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMap.build());
     }
 
     @ExceptionHandler(MateriaException.class)
