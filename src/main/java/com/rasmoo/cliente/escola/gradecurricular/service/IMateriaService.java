@@ -17,4 +17,6 @@ public interface IMateriaService {
     MateriaDTO consultar(final Long id);
 
     List<MateriaDTO> listarPorHoraMinima(final int horaMinima);
+
+    List<MateriaDTO> listarPorFrequencia(final int freq);
 }

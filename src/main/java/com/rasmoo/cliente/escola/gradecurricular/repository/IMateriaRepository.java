@@ -12,4 +12,7 @@ public interface IMateriaRepository extends JpaRepository<MateriaEntity, Long> {
 
     @Query("SELECT m FROM MateriaEntity m WHERE m.horas >= :horaMinima")
     List<MateriaEntity> findByHoraMinima(@Param("horaMinima") int horaMinima);
+
+    @Query("SELECT m FROM MateriaEntity m WHERE m.frequencia = :freq")
+    List<MateriaEntity> findByFrequencia(@Param("freq") int freq);
 }
