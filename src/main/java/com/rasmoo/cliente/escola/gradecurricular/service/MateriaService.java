@@ -17,15 +17,20 @@ import org.modelmapper.TypeToken;
 @Service
 public class MateriaService implements IMateriaService {
 
-    @Autowired
     private IMateriaRepository materiaRepository;
+    private ModelMapper mapper;
+
+    @Autowired
+    public MateriaService(IMateriaRepository materiaRepository) {
+        this.mapper = new ModelMapper();
+        this.materiaRepository = materiaRepository;
+    }
 
     @Override
     public Boolean atualizar(MateriaDTO materia) {
         try {
             this.consultar(materia.getId());
-            ModelMapper mapper = new ModelMapper();
-            MateriaEntity materiaEntityAtualizada = mapper.map(materia, MateriaEntity.class);
+            MateriaEntity materiaEntityAtualizada = this.mapper.map(materia, MateriaEntity.class);
             this.materiaRepository.save(materiaEntityAtualizada);
 
             return Boolean.TRUE;
@@ -53,8 +58,7 @@ public class MateriaService implements IMateriaService {
     @Override
     public Boolean cadastrar(MateriaDTO materia) {
         try {
-            ModelMapper mapper = new ModelMapper();
-            MateriaEntity materiaEntity = mapper.map(materia, MateriaEntity.class);
+            MateriaEntity materiaEntity = this.mapper.map(materia, MateriaEntity.class);
             this.materiaRepository.save(materiaEntity);
             return true;
         } catch (Exception e) {
@@ -65,8 +69,8 @@ public class MateriaService implements IMateriaService {
     @Override
     public List<MateriaDTO> listarTodas() {
         try {
-            ModelMapper mapper = new ModelMapper();
-            return mapper.map(this.materiaRepository.findAll(), new TypeToken<List<MateriaDTO>>() {}.getType());
+            return this.mapper.map(this.materiaRepository.findAll(), new TypeToken<List<MateriaDTO>>() {
+            }.getType());
         } catch (Exception e) {
             return new ArrayList<>();
         }
@@ -75,10 +79,9 @@ public class MateriaService implements IMateriaService {
     @Override
     public MateriaDTO consultar(Long id) {
         try {
-            ModelMapper mapper = new ModelMapper();
             Optional<MateriaEntity> materiaOptional = this.materiaRepository.findById(id);
             if (materiaOptional.isPresent()) {
-                return mapper.map(materiaOptional.get(), MateriaDTO.class);
+                return this.mapper.map(materiaOptional.get(), MateriaDTO.class);
             }
             throw new MateriaException("Matéria não encontrada", HttpStatus.NOT_FOUND);
         } catch (MateriaException m) {
