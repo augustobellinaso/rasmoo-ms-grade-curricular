@@ -1,14 +1,12 @@
 package com.rasmoo.cliente.escola.gradecurricular.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.Caching;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import com.rasmoo.cliente.escola.gradecurricular.dto.MateriaDTO;
 import com.rasmoo.cliente.escola.gradecurricular.entity.MateriaEntity;
@@ -18,6 +16,7 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 
 @Service
+@CacheConfig(cacheNames = "materia")
 public class MateriaService implements IMateriaService {
 
     private static final String MENSAGEM_ERRO = "Erro interno identificado. Contate o suporte";
@@ -33,10 +32,7 @@ public class MateriaService implements IMateriaService {
     }
 
     @Override
-    @Caching(evict = {
-            @CacheEvict(value = "materia", key = "#materia.id"),
-            @CacheEvict(value = "escola", key = "#materia.id")
-    })
+    @CacheEvict(key = "#materia.id")
     public Boolean atualizar(MateriaDTO materia) {
         try {
             this.consultar(materia.getId());
@@ -66,6 +62,7 @@ public class MateriaService implements IMateriaService {
     }
 
     @Override
+    @CacheEvict(allEntries = true)
     public Boolean cadastrar(MateriaDTO materia) {
         try {
             MateriaEntity materiaEntity = this.mapper.map(materia, MateriaEntity.class);
@@ -77,6 +74,7 @@ public class MateriaService implements IMateriaService {
     }
 
     @Override
+    @Cacheable(unless = "#result.size() < 3")
     public List<MateriaDTO> listarTodas() {
         try {
             return this.mapper.map(this.materiaRepository.findAll(), new TypeToken<List<MateriaDTO>>() {
@@ -87,7 +85,7 @@ public class MateriaService implements IMateriaService {
     }
 
     @Override
-    @Cacheable(value = "materia", key = "#id")
+    @Cacheable(key = "#id")
     public MateriaDTO consultar(Long id) {
         try {
             Optional<MateriaEntity> materiaOptional = this.materiaRepository.findById(id);
