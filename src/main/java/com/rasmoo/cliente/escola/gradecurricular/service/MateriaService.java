@@ -17,8 +17,11 @@ import org.modelmapper.TypeToken;
 @Service
 public class MateriaService implements IMateriaService {
 
-    private IMateriaRepository materiaRepository;
-    private ModelMapper mapper;
+    private static final String MENSAGEM_ERRO = "Erro interno identificado. Contate o suporte";
+    private static final String MATERIA_NAO_ENCONTRADA = "Matéria não encontrada";
+
+    private final IMateriaRepository materiaRepository;
+    private final ModelMapper mapper;
 
     @Autowired
     public MateriaService(IMateriaRepository materiaRepository) {
@@ -47,7 +50,7 @@ public class MateriaService implements IMateriaService {
         try {
             this.consultar(id);
             this.materiaRepository.deleteById(id);
-            return true;
+            return Boolean.TRUE;
         } catch (MateriaException m) {
             throw m;
         } catch (Exception e) {
@@ -60,9 +63,9 @@ public class MateriaService implements IMateriaService {
         try {
             MateriaEntity materiaEntity = this.mapper.map(materia, MateriaEntity.class);
             this.materiaRepository.save(materiaEntity);
-            return true;
+            return Boolean.TRUE;
         } catch (Exception e) {
-            return false;
+            throw new MateriaException(MENSAGEM_ERRO, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -72,7 +75,7 @@ public class MateriaService implements IMateriaService {
             return this.mapper.map(this.materiaRepository.findAll(), new TypeToken<List<MateriaDTO>>() {
             }.getType());
         } catch (Exception e) {
-            return new ArrayList<>();
+            throw new MateriaException(MENSAGEM_ERRO, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -83,11 +86,11 @@ public class MateriaService implements IMateriaService {
             if (materiaOptional.isPresent()) {
                 return this.mapper.map(materiaOptional.get(), MateriaDTO.class);
             }
-            throw new MateriaException("Matéria não encontrada", HttpStatus.NOT_FOUND);
+            throw new MateriaException(MATERIA_NAO_ENCONTRADA, HttpStatus.NOT_FOUND);
         } catch (MateriaException m) {
             throw m;
         } catch (Exception e) {
-            throw new MateriaException("Erro interno identificado. Contate o suporte", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new MateriaException(MENSAGEM_ERRO, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
