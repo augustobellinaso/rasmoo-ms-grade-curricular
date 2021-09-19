@@ -24,8 +24,14 @@ public class MateriaController {
     private IMateriaService materiaService;
 
     @GetMapping
-    public ResponseEntity<List<MateriaDTO>> listaMaterias() {
-        return ResponseEntity.status(HttpStatus.OK).body(this.materiaService.listarTodas());
+    public ResponseEntity<Response<List<MateriaDTO>>> listarMaterias() {
+        Response<List<MateriaDTO>> response = new Response<>();
+        response.setData(this.materiaService.listarTodas());
+        response.setStatusCode(HttpStatus.OK.value());
+        response.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(MateriaController.class)
+                        .listarMaterias())
+                .withSelfRel());
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @GetMapping(path = "/{id}")
