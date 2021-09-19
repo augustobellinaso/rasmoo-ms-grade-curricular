@@ -1,10 +1,12 @@
 package com.rasmoo.cliente.escola.gradecurricular.controller;
 
 import java.util.List;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.rasmoo.cliente.escola.gradecurricular.dto.MateriaDTO;
 import com.rasmoo.cliente.escola.gradecurricular.entity.MateriaEntity;
 import com.rasmoo.cliente.escola.gradecurricular.service.IMateriaService;
 
@@ -16,17 +18,17 @@ public class MateriaController {
     private IMateriaService materiaService;
 
     @GetMapping
-    public ResponseEntity<List<MateriaEntity>> listaMaterias() {
+    public ResponseEntity<List<MateriaDTO>> listaMaterias() {
         return ResponseEntity.status(HttpStatus.OK).body(this.materiaService.listarTodas());
     }
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<MateriaEntity> consultaMateria(@PathVariable Long id) {
+    public ResponseEntity<MateriaDTO> consultarMateria(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(this.materiaService.consultar(id));
     }
 
     @PostMapping
-    public ResponseEntity<Boolean> cadastrarMateria(@RequestBody MateriaEntity materia) {
+    public ResponseEntity<Boolean> cadastrarMateria(@Valid @RequestBody MateriaDTO materia) {
         return ResponseEntity.status(HttpStatus.CREATED).body(this.materiaService.cadastrar(materia));
     }
 
@@ -36,7 +38,7 @@ public class MateriaController {
     }
 
     @PutMapping
-    public ResponseEntity<Boolean> atualizarMateria(@RequestBody MateriaEntity materia) {
+    public ResponseEntity<Boolean> atualizarMateria(@Valid @RequestBody MateriaDTO materia) {
         return ResponseEntity.status(HttpStatus.OK).body(this.materiaService.atualizar(materia));
     }
 

@@ -1,17 +1,18 @@
 package com.rasmoo.cliente.escola.gradecurricular.service;
 
 import java.util.List;
+import com.rasmoo.cliente.escola.gradecurricular.dto.MateriaDTO;
 import com.rasmoo.cliente.escola.gradecurricular.entity.MateriaEntity;
 
 public interface IMateriaService {
 
-    Boolean atualizar(final MateriaEntity materia);
+    Boolean atualizar(final MateriaDTO materia);
 
     Boolean excluir(final Long id);
 
-    Boolean cadastrar(final MateriaEntity materia);
+    Boolean cadastrar(final MateriaDTO materia);
 
-    List<MateriaEntity> listarTodas();
+    List<MateriaDTO> listarTodas();
 
-    MateriaEntity consultar(final Long id);
+    MateriaDTO consultar(final Long id);
 }
