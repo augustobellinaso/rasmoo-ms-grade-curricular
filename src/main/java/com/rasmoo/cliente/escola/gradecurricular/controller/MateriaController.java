@@ -19,6 +19,8 @@ public class MateriaController {
 
     private static final String UPDATE = "UPDATE";
 
+    private static final String LIST = "GET_ALL";
+
 
     @Autowired
     private IMateriaService materiaService;
@@ -53,18 +55,43 @@ public class MateriaController {
     }
 
     @PostMapping
-    public ResponseEntity<Boolean> cadastrarMateria(@Valid @RequestBody MateriaDTO materia) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(this.materiaService.cadastrar(materia));
+    public ResponseEntity<Response<Boolean>> cadastrarMateria(@Valid @RequestBody MateriaDTO materia) {
+        Response<Boolean> response = new Response<>();
+        response.setData(this.materiaService.cadastrar(materia));
+        response.setStatusCode(HttpStatus.CREATED.value());
+        response.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(MateriaController.class).cadastrarMateria(materia))
+                .withSelfRel());
+        response.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(MateriaController.class).atualizarMateria(materia))
+                .withRel(UPDATE));
+        response.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(MateriaController.class).listarMaterias())
+                .withRel(LIST));
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+
     }
 
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity<Boolean> excluirMateria(@PathVariable Long id) {
-        return ResponseEntity.status(HttpStatus.OK).body(this.materiaService.excluir(id));
+    public ResponseEntity<Response<Boolean>> excluirMateria(@PathVariable Long id) {
+        Response<Boolean> response = new Response<>();
+        response.setData(this.materiaService.excluir(id));
+        response.setStatusCode(HttpStatus.OK.value());
+        response.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(MateriaController.class).excluirMateria(id))
+                .withSelfRel());
+        response.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(MateriaController.class).listarMaterias())
+                .withRel(LIST));
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @PutMapping
-    public ResponseEntity<Boolean> atualizarMateria(@Valid @RequestBody MateriaDTO materia) {
-        return ResponseEntity.status(HttpStatus.OK).body(this.materiaService.atualizar(materia));
+    public ResponseEntity<Response<Boolean>> atualizarMateria(@Valid @RequestBody MateriaDTO materia) {
+        Response<Boolean> response = new Response<>();
+        response.setData(this.materiaService.atualizar(materia));
+        response.setStatusCode(HttpStatus.OK.value());
+        response.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(MateriaController.class).atualizarMateria(materia))
+                .withSelfRel());
+        response.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(MateriaController.class).listarMaterias())
+                .withRel(LIST));
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
 }

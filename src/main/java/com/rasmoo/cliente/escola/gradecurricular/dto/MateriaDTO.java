@@ -3,12 +3,15 @@ package com.rasmoo.cliente.escola.gradecurricular.dto;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import org.springframework.hateoas.RepresentationModel;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
-public class MateriaDTO {
+public class MateriaDTO extends RepresentationModel<MateriaDTO> {
 
     private Long id;
 

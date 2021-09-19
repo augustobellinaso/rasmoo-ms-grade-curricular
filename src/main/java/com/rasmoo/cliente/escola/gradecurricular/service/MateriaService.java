@@ -7,8 +7,10 @@ import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import com.rasmoo.cliente.escola.gradecurricular.controller.MateriaController;
 import com.rasmoo.cliente.escola.gradecurricular.dto.MateriaDTO;
 import com.rasmoo.cliente.escola.gradecurricular.entity.MateriaEntity;
 import com.rasmoo.cliente.escola.gradecurricular.exception.MateriaException;
@@ -76,8 +78,15 @@ public class MateriaService implements IMateriaService {
     @CachePut(unless = "#result.size() < 3")
     public List<MateriaDTO> listarTodas() {
         try {
-            return this.mapper.map(this.materiaRepository.findAll(), new TypeToken<List<MateriaDTO>>() {
+            List<MateriaDTO> materiaDTO = this.mapper.map(this.materiaRepository.findAll(), new TypeToken<List<MateriaDTO>>() {
             }.getType());
+
+            materiaDTO.forEach(materia -> {
+                materia.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(MateriaController.class)
+                                .consultarMateria(materia.getId()))
+                        .withSelfRel());
+            } );
+            return materiaDTO;
         } catch (Exception e) {
             throw new MateriaException(MENSAGEM_ERRO, HttpStatus.INTERNAL_SERVER_ERROR);
         }
