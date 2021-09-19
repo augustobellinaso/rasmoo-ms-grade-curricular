@@ -3,11 +3,13 @@ package com.rasmoo.cliente.escola.gradecurricular.controller;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.rasmoo.cliente.escola.gradecurricular.dto.MateriaDTO;
 import com.rasmoo.cliente.escola.gradecurricular.entity.MateriaEntity;
+import com.rasmoo.cliente.escola.gradecurricular.model.Response;
 import com.rasmoo.cliente.escola.gradecurricular.service.IMateriaService;
 
 @RestController
@@ -23,8 +25,14 @@ public class MateriaController {
     }
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<MateriaDTO> consultarMateria(@PathVariable Long id) {
-        return ResponseEntity.status(HttpStatus.OK).body(this.materiaService.consultar(id));
+    public ResponseEntity<Response<MateriaDTO>> consultarMateria(@PathVariable Long id) {
+        Response<MateriaDTO> response = new Response<>();
+        response.setData(this.materiaService.consultar(id));
+        response.setStatusCode(HttpStatus.OK.value());
+        response.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(MateriaController.class)
+                .consultarMateria(id))
+                .withSelfRel());
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @PostMapping
