@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -32,7 +33,6 @@ public class MateriaService implements IMateriaService {
     }
 
     @Override
-    @CacheEvict(key = "#materia.id")
     public Boolean atualizar(MateriaDTO materia) {
         try {
             this.consultar(materia.getId());
@@ -62,7 +62,6 @@ public class MateriaService implements IMateriaService {
     }
 
     @Override
-    @CacheEvict(allEntries = true)
     public Boolean cadastrar(MateriaDTO materia) {
         try {
             MateriaEntity materiaEntity = this.mapper.map(materia, MateriaEntity.class);
@@ -74,7 +73,7 @@ public class MateriaService implements IMateriaService {
     }
 
     @Override
-    @Cacheable(unless = "#result.size() < 3")
+    @CachePut(unless = "#result.size() < 3")
     public List<MateriaDTO> listarTodas() {
         try {
             return this.mapper.map(this.materiaRepository.findAll(), new TypeToken<List<MateriaDTO>>() {
@@ -85,7 +84,7 @@ public class MateriaService implements IMateriaService {
     }
 
     @Override
-    @Cacheable(key = "#id")
+    @CachePut(key = "#id")
     public MateriaDTO consultar(Long id) {
         try {
             Optional<MateriaEntity> materiaOptional = this.materiaRepository.findById(id);
