@@ -8,13 +8,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.rasmoo.cliente.escola.gradecurricular.dto.MateriaDTO;
-import com.rasmoo.cliente.escola.gradecurricular.entity.MateriaEntity;
 import com.rasmoo.cliente.escola.gradecurricular.model.Response;
 import com.rasmoo.cliente.escola.gradecurricular.service.IMateriaService;
 
 @RestController
 @RequestMapping(path = "/materia")
 public class MateriaController {
+
+    private static final String DELETE = "DELETE";
+
+    private static final String UPDATE = "UPDATE";
+
 
     @Autowired
     private IMateriaService materiaService;
@@ -27,11 +31,18 @@ public class MateriaController {
     @GetMapping(path = "/{id}")
     public ResponseEntity<Response<MateriaDTO>> consultarMateria(@PathVariable Long id) {
         Response<MateriaDTO> response = new Response<>();
-        response.setData(this.materiaService.consultar(id));
+        MateriaDTO materia = this.materiaService.consultar(id);
+        response.setData(materia);
         response.setStatusCode(HttpStatus.OK.value());
         response.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(MateriaController.class)
-                .consultarMateria(id))
+                        .consultarMateria(id))
                 .withSelfRel());
+        response.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(MateriaController.class)
+                        .excluirMateria(id))
+                .withRel(DELETE));
+        response.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(MateriaController.class)
+                        .atualizarMateria(materia))
+                .withRel(UPDATE));
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
