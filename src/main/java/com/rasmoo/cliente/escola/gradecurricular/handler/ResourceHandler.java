@@ -8,6 +8,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import com.rasmoo.cliente.escola.gradecurricular.exception.CursoException;
 import com.rasmoo.cliente.escola.gradecurricular.exception.MateriaException;
 import com.rasmoo.cliente.escola.gradecurricular.model.Response;
 
@@ -33,6 +34,14 @@ public class ResourceHandler {
 
     @ExceptionHandler(MateriaException.class)
     public ResponseEntity<Response<String>> handlerMateriaException(MateriaException ex) {
+        Response<String> response = new Response<>();
+        response.setStatusCode(ex.getHttpStatus().value());
+        response.setData(ex.getMessage());
+        return ResponseEntity.status(ex.getHttpStatus()).body(response);
+    }
+
+    @ExceptionHandler(CursoException.class)
+    public ResponseEntity<Response<String>> handlerCursoException(CursoException ex) {
         Response<String> response = new Response<>();
         response.setStatusCode(ex.getHttpStatus().value());
         response.setData(ex.getMessage());
