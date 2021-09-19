@@ -24,7 +24,7 @@ public class CursoController {
         Response<Boolean> response = new Response<>();
 
         response.setData(cursoService.cadastrar(curso));
-        response.setStatusCode(HttpStatus.OK.value());
+        response.setStatusCode(HttpStatus.CREATED.value());
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
 

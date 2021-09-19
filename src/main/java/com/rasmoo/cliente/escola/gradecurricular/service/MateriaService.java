@@ -8,7 +8,7 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import com.rasmoo.cliente.escola.gradecurricular.constante.Mensagens;
+import com.rasmoo.cliente.escola.gradecurricular.constante.MensagensConstant;
 import com.rasmoo.cliente.escola.gradecurricular.controller.MateriaController;
 import com.rasmoo.cliente.escola.gradecurricular.dto.MateriaDTO;
 import com.rasmoo.cliente.escola.gradecurricular.entity.MateriaEntity;
@@ -60,11 +60,11 @@ public class MateriaService implements IMateriaService {
     public Boolean cadastrar(MateriaDTO materia) {
         try {
             if (materia.getId() != null) {
-                throw new MateriaException(Mensagens.ERRO_ID_INFORMADO.getDescricao(), HttpStatus.BAD_REQUEST);
+                throw new MateriaException(MensagensConstant.ERRO_ID_INFORMADO.getDescricao(), HttpStatus.BAD_REQUEST);
             }
 
             if (this.materiaRepository.findByCodigo(materia.getCodigo()) != null) {
-                throw new MateriaException(Mensagens.ERRO_MATERIA_CADASTRADA_ANTERIORMENTE.getDescricao(), HttpStatus.BAD_REQUEST);
+                throw new MateriaException(MensagensConstant.ERRO_MATERIA_CADASTRADA_ANTERIORMENTE.getDescricao(), HttpStatus.BAD_REQUEST);
             }
 
             return this.cadastrarOuAtualizar(materia);
@@ -72,7 +72,7 @@ public class MateriaService implements IMateriaService {
         } catch (MateriaException m) {
             throw m;
         } catch (Exception e) {
-            throw new MateriaException(Mensagens.ERRO_GENERICO.getDescricao(), HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new MateriaException(MensagensConstant.ERRO_GENERICO.getDescricao(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -88,7 +88,7 @@ public class MateriaService implements IMateriaService {
                     .withSelfRel()));
             return materiaDTO;
         } catch (Exception e) {
-            throw new MateriaException(Mensagens.ERRO_GENERICO.getDescricao(), HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new MateriaException(MensagensConstant.ERRO_GENERICO.getDescricao(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -100,11 +100,11 @@ public class MateriaService implements IMateriaService {
             if (materiaOptional.isPresent()) {
                 return this.mapper.map(materiaOptional.get(), MateriaDTO.class);
             }
-            throw new MateriaException(Mensagens.ERRO_MATERIA_NAO_ENCONTRADA.getDescricao(), HttpStatus.NOT_FOUND);
+            throw new MateriaException(MensagensConstant.ERRO_MATERIA_NAO_ENCONTRADA.getDescricao(), HttpStatus.NOT_FOUND);
         } catch (MateriaException m) {
             throw m;
         } catch (Exception e) {
-            throw new MateriaException(Mensagens.ERRO_GENERICO.getDescricao(), HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new MateriaException(MensagensConstant.ERRO_GENERICO.getDescricao(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

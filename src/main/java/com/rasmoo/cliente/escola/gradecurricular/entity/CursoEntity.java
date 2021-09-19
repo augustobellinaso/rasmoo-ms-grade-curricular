@@ -29,7 +29,7 @@ public class CursoEntity implements Serializable {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String codigo;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "materia_id")
     private List<MateriaEntity> materias;
 }
