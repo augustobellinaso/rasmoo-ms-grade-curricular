@@ -7,7 +7,7 @@ import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.rasmoo.cliente.escola.gradecurricular.constante.HyperLinkConstant;
+import com.rasmoo.cliente.escola.gradecurricular.constant.HyperLinkConstant;
 import com.rasmoo.cliente.escola.gradecurricular.dto.MateriaDTO;
 import com.rasmoo.cliente.escola.gradecurricular.model.Response;
 import com.rasmoo.cliente.escola.gradecurricular.service.IMateriaService;
