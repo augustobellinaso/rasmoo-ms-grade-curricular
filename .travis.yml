@@ -1,0 +1,9 @@
+language: java
+jdk: "-openjdk11"
+deploy:
+  provider: heroku
+  api_key:
+    secure: U0fFRSIebgZBKkDZGofUArsriK0TKO9CUxoGakoBCAXp57Ft/2e/l2arqfSNv1idpkpGGuOboPkmcOiHi1nkhlKszvZdM8Qio/OZ3z5wKNJ6Z0GOA2vYwWKSyW5kVLBKQOXeofuZPIAcGfYK2IppiGPowupMu1TGJ+TqXjjNBzZbZ03z+cRWb6GFZNzg33QW1UqKAdTKqbUB6WwFdOZgVlsxHZR8Z1M43agE+QxOnZxNjPC+9KoXKSJPUxCB5rnOHDlZagK9laYqMLbja+GwrYFBYlTbEWJgq2JTCAoGLokxDhKRTlOPCtcfoQD0spF4FZD2Bsh/vUJnI01xX7GPV42HWU/WOkubuYNAKbkZy6EAe3XpCfBz+2SqBtte26llqNXyTPwykFFET00Ckf+xb2lb6Km8o+fSrYRgfmkHAWPR2GfxQDPw1qBC2HDTc7zQNa5BJlu+OHaH2Fb/RKS1ae55R36VW+2pFT6I2RW0wDqNJ2ekYx1urEr3E9Te0fYz8+URuXZ/j3MZ95cn75VPtGQOzi/03TOwZvhx6IgeVZIbkvQG9zobhUVNtIk4s8fmLc8n00VZvb2s2aKbM5Zp+Xbki2d9rWAppBozl00M2WYXGZce6gMSeZQ0ZL6TW06uiJN6tBOpUqx63waqJwQFIW6HRj8ZaqMpozv3Zdnh5sM=
+  app: abellinaso-grade-curricular
+  on:
+    all_branches: true
