@@ -7,6 +7,5 @@ deploy:
   app: abellinaso-grade-curricular
   on:
     all_branches: true
-script:
-  - sudo mvn clean package
-  - sudo mvn install
+before_install:
+  - chmod +x mvnw
