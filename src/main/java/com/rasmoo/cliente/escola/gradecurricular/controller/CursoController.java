@@ -31,7 +31,7 @@ public class CursoController {
     }
 
     @GetMapping
-    public ResponseEntity<Response<List<CursoEntity>>> listarCurso() {
+    public ResponseEntity<Response<List<CursoEntity>>> listarCursos() {
         Response<List<CursoEntity>> response = new Response<>();
         response.setData(this.cursoService.listarCursos());
         response.setStatusCode(HttpStatus.OK.value());
