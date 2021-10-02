@@ -69,7 +69,7 @@ public class MateriaControllerUnitTest {
     }
 
     @Test
-    public void testConsultarMaterias() {
+    public void testConsultarMateria() {
         Mockito.when(this.materiaService.consultar(1L)).thenReturn(materiaDto);
 
         ResponseEntity<Response<MateriaDTO>> materias = restTemplate.exchange(

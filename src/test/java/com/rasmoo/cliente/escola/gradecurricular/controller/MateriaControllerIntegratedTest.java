@@ -1,7 +1,6 @@
 package com.rasmoo.cliente.escola.gradecurricular.controller;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -10,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import com.rasmoo.cliente.escola.gradecurricular.dto.MateriaDTO;
@@ -99,6 +99,81 @@ public class MateriaControllerIntegratedTest {
                         });
         assertNotNull(materias.getBody().getData());
         assertEquals(2, materias.getBody().getData().size());
+        assertEquals(200, materias.getBody().getStatusCode());
+    }
+
+    @Test
+    public void testConsultarMateriaPorId() {
+        List<MateriaEntity> materiasList = this.materiaRepository.findAll();
+        Long id = materiasList.get(0).getId();
+
+        ResponseEntity<Response<MateriaDTO>> materias = restTemplate.exchange(
+                "http://localhost:" + this.port + "/materia/" + id, HttpMethod.GET, null,
+                new ParameterizedTypeReference<Response<MateriaDTO>>() {
+                });
+        assertNotNull(materias.getBody().getData());
+        assertEquals(id, materias.getBody().getData().getId());
+        assertEquals(34, materias.getBody().getData().getHoras());
+        assertEquals("ILP", materias.getBody().getData().getCodigo());
+        assertEquals(200, materias.getBody().getStatusCode());
+    }
+
+    @Test
+    public void testAtualizarMateria() {
+        List<MateriaEntity> materiasList = this.materiaRepository.findAll();
+        MateriaEntity materia = materiasList.get(0);
+
+        materia.setNome("Teste Atualiza Materia");
+
+        HttpEntity<MateriaEntity> request = new HttpEntity<>(materia);
+
+        ResponseEntity<Response<Boolean>> materias = restTemplate.exchange(
+                "http://localhost:" + this.port + "/materia/", HttpMethod.PUT, request,
+                new ParameterizedTypeReference<Response<Boolean>>() {
+                });
+
+        MateriaEntity materiaAtualizada = this.materiaRepository.findById(materia.getId()).get();
+        assertTrue(materias.getBody().getData());
+        assertEquals("Teste Atualiza Materia", materiaAtualizada.getNome());
+        assertEquals(200, materias.getBody().getStatusCode());
+    }
+
+    @Test
+    public void testCadastrarMateria() {
+        MateriaEntity m4 = new MateriaEntity();
+        m4.setNome("Materia 4");
+        m4.setCodigo("ILP4");
+        m4.setHoras(102);
+        m4.setFrequencia(2);
+
+        HttpEntity<MateriaEntity> request = new HttpEntity<>(m4);
+
+        ResponseEntity<Response<Boolean>> materias = restTemplate.exchange(
+                "http://localhost:" + this.port + "/materia/", HttpMethod.POST, request,
+                new ParameterizedTypeReference<Response<Boolean>>() {
+                });
+
+        List<MateriaEntity> materiasAtualizadas = this.materiaRepository.findAll();
+
+        assertTrue(materias.getBody().getData());
+        assertEquals(4, materiasAtualizadas.size());
+        assertEquals(201, materias.getBody().getStatusCode());
+    }
+
+    @Test
+    public void testeExcluirMateriaPorId() {
+        List<MateriaEntity> materiasList = this.materiaRepository.findAll();
+        Long id = materiasList.get(0).getId();
+
+        ResponseEntity<Response<Boolean>> materias = restTemplate.exchange(
+                "http://localhost:" + this.port + "/materia/" + id, HttpMethod.DELETE, null,
+                new ParameterizedTypeReference<Response<Boolean>>() {
+                });
+
+        List<MateriaEntity> materiasAtualizadas = this.materiaRepository.findAll();
+
+        assertNotNull(materias.getBody().getData());
+        assertEquals(2, materiasAtualizadas.size());
         assertEquals(200, materias.getBody().getStatusCode());
     }
 }
