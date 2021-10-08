@@ -255,4 +255,139 @@ public class MateriaServiceUnitTest {
     }
 
     //CENARIOS DE THROW EXCEPTION
+    @Test
+    void testeAtualizarThrowException() {
+        MateriaDTO materiaDTO = new MateriaDTO();
+        materiaDTO.setNome("Introdução a lógica de programação");
+        materiaDTO.setId(1L);
+        materiaDTO.setCodigo("ILP1");
+        materiaDTO.setFrequencia(1);
+        materiaDTO.setHoras(68);
+
+
+        Mockito.when(this.materiaRepository.findById(1L)).thenReturn(Optional.of(materiaEntity));
+        Mockito.when(this.materiaRepository.save(materiaEntity)).thenThrow(IllegalStateException.class);
+
+        MateriaException materiaException;
+
+        materiaException = assertThrows(MateriaException.class, () -> {
+            this.materiaService.atualizar(materiaDTO);
+        });
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, materiaException.getHttpStatus());
+        assertEquals(MensagensConstant.ERRO_GENERICO.getDescricao(), materiaException.getMessage());
+
+        Mockito.verify(this.materiaRepository, Mockito.times(1)).findById(1L);
+        Mockito.verify(this.materiaRepository, Mockito.times(1)).save(materiaEntity);
+    }
+
+    @Test
+    void testeCadastrarThrowException() {
+        MateriaDTO materiaDTO = new MateriaDTO();
+        materiaDTO.setNome("Introdução a lógica de programação");
+        materiaDTO.setCodigo("ILP1");
+        materiaDTO.setFrequencia(1);
+        materiaDTO.setHoras(68);
+
+        materiaEntity.setId(null);
+
+        Mockito.when(this.materiaRepository.findByCodigo("ILP1")).thenReturn(null);
+        Mockito.when(this.materiaRepository.save(materiaEntity)).thenThrow(IllegalStateException.class);
+
+        MateriaException materiaException;
+
+        materiaException = assertThrows(MateriaException.class, () -> {
+            this.materiaService.cadastrar(materiaDTO);
+        });
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, materiaException.getHttpStatus());
+        assertEquals(MensagensConstant.ERRO_GENERICO.getDescricao(), materiaException.getMessage());
+
+        Mockito.verify(this.materiaRepository, Mockito.times(0)).findById(1L);
+        Mockito.verify(this.materiaRepository, Mockito.times(1)).findByCodigo("ILP1");
+        Mockito.verify(this.materiaRepository, Mockito.times(1)).save(materiaEntity);
+
+        materiaEntity.setId(1L);
+    }
+
+    @Test
+    void testeConsultarThrowException() {
+        Mockito.when(this.materiaRepository.findById(1L)).thenThrow(IllegalStateException.class);
+
+        MateriaException materiaException;
+
+        materiaException = assertThrows(MateriaException.class, () -> {
+            this.materiaService.consultar(1L);
+        });
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, materiaException.getHttpStatus());
+        assertEquals(MensagensConstant.ERRO_GENERICO.getDescricao(), materiaException.getMessage());
+
+        Mockito.verify(this.materiaRepository, Mockito.times(1)).findById(1L);
+    }
+
+    @Test
+    void testeListarThrowException() {
+        Mockito.when(this.materiaRepository.findAll()).thenThrow(IllegalStateException.class);
+
+        MateriaException materiaException;
+
+        materiaException = assertThrows(MateriaException.class, () -> {
+            this.materiaService.listarTodas();
+        });
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, materiaException.getHttpStatus());
+        assertEquals(MensagensConstant.ERRO_GENERICO.getDescricao(), materiaException.getMessage());
+
+        Mockito.verify(this.materiaRepository, Mockito.times(1)).findAll();
+    }
+
+    @Test
+    void testeListarPorFrequenciaThrowException() {
+        Mockito.when(this.materiaRepository.findByFrequencia(1)).thenThrow(IllegalStateException.class);
+
+        MateriaException materiaException;
+
+        materiaException = assertThrows(MateriaException.class, () -> {
+            this.materiaService.listarPorFrequencia(1);
+        });
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, materiaException.getHttpStatus());
+        assertEquals(MensagensConstant.ERRO_GENERICO.getDescricao(), materiaException.getMessage());
+
+        Mockito.verify(this.materiaRepository, Mockito.times(1)).findByFrequencia(1);
+    }
+
+    @Test
+    void testeListarPorHoraMinimaThrowException() {
+        Mockito.when(this.materiaRepository.findByHoraMinima(34)).thenThrow(IllegalStateException.class);
+
+        MateriaException materiaException;
+
+        materiaException = assertThrows(MateriaException.class, () -> {
+            this.materiaService.listarPorHoraMinima(34);
+        });
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, materiaException.getHttpStatus());
+        assertEquals(MensagensConstant.ERRO_GENERICO.getDescricao(), materiaException.getMessage());
+
+        Mockito.verify(this.materiaRepository, Mockito.times(1)).findByHoraMinima(34);
+    }
+
+    @Test
+    void testeExcluirThrowException() {
+        Mockito.when(this.materiaRepository.findById(1L)).thenReturn(Optional.of(materiaEntity));
+        Mockito.doThrow(IllegalStateException.class).when(this.materiaRepository).deleteById(1L);
+
+        MateriaException materiaException;
+
+        materiaException = assertThrows(MateriaException.class, () -> {
+            this.materiaService.excluir(1L);
+        });
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, materiaException.getHttpStatus());
+        assertEquals(MensagensConstant.ERRO_GENERICO.getDescricao(), materiaException.getMessage());
+
+        Mockito.verify(this.materiaRepository, Mockito.times(1)).deleteById(1L);
+    }
 }

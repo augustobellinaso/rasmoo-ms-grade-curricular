@@ -39,7 +39,7 @@ public class MateriaService implements IMateriaService {
         } catch (MateriaException m) {
             throw m;
         } catch (Exception e) {
-            throw e;
+            throw new MateriaException(MensagensConstant.ERRO_GENERICO.getDescricao(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -52,7 +52,7 @@ public class MateriaService implements IMateriaService {
         } catch (MateriaException m) {
             throw m;
         } catch (Exception e) {
-            throw e;
+            throw new MateriaException(MensagensConstant.ERRO_GENERICO.getDescricao(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -110,14 +110,23 @@ public class MateriaService implements IMateriaService {
 
     @Override
     public List<MateriaDTO> listarPorHoraMinima(int horaMinima) {
-        return this.mapper.map(this.materiaRepository.findByHoraMinima(horaMinima), new TypeToken<List<MateriaDTO>>() {
-        }.getType());
+        try {
+            return this.mapper.map(this.materiaRepository.findByHoraMinima(horaMinima), new TypeToken<List<MateriaDTO>>() {
+            }.getType());
+        } catch (Exception e) {
+            throw new MateriaException(MensagensConstant.ERRO_GENERICO.getDescricao(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
     }
 
     @Override
     public List<MateriaDTO> listarPorFrequencia(int freq) {
-        return this.mapper.map(this.materiaRepository.findByFrequencia(freq), new TypeToken<List<MateriaDTO>>() {
-        }.getType());
+        try {
+            return this.mapper.map(this.materiaRepository.findByFrequencia(freq), new TypeToken<List<MateriaDTO>>() {
+            }.getType());
+        } catch (Exception e) {
+            throw new MateriaException(MensagensConstant.ERRO_GENERICO.getDescricao(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     private Boolean cadastrarOuAtualizar(MateriaDTO materiaDTO) {
