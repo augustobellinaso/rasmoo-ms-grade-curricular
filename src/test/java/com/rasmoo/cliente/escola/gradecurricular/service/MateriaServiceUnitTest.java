@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import com.rasmoo.cliente.escola.gradecurricular.dto.MateriaDTO;
 import com.rasmoo.cliente.escola.gradecurricular.entity.MateriaEntity;
 import com.rasmoo.cliente.escola.gradecurricular.repository.IMateriaRepository;
@@ -92,6 +93,75 @@ public class MateriaServiceUnitTest {
 
     }
 
+    @Test
+    void testeConsultaSucesso() {
+        Mockito.when(this.materiaRepository.findById(1L)).thenReturn(Optional.of(materiaEntity));
+        MateriaDTO materiaDTO = this.materiaService.consultar(1L);
+
+        assertNotNull(materiaDTO);
+        assertEquals("ILP1", materiaDTO.getCodigo());
+        assertEquals(1, materiaDTO.getId());
+        assertEquals(1, materiaDTO.getFrequencia());
+
+        Mockito.verify(this.materiaRepository, Mockito.times(1)).findById(1L);
+    }
+
+    @Test
+    void testeCadastrarSucesso() {
+        MateriaDTO materiaDTO = new MateriaDTO();
+        materiaDTO.setNome("Introdução a lógica de programação");
+        materiaDTO.setCodigo("ILP1");
+        materiaDTO.setFrequencia(1);
+        materiaDTO.setHoras(68);
+
+        materiaEntity.setId(null);
+
+        Mockito.when(this.materiaRepository.findByCodigo("ILP1")).thenReturn(null);
+        Mockito.when(this.materiaRepository.save(materiaEntity)).thenReturn(materiaEntity);
+
+        Boolean sucesso = this.materiaService.cadastrar(materiaDTO);
+
+        assertTrue(sucesso);
+
+        Mockito.verify(this.materiaRepository, Mockito.times(1)).findByCodigo("ILP1");
+        Mockito.verify(this.materiaRepository, Mockito.times(1)).save(materiaEntity);
+
+        materiaEntity.setId(1L);
+
+    }
+
+    @Test
+    void testeAtualizarSucesso() {
+        MateriaDTO materiaDTO = new MateriaDTO();
+        materiaDTO.setNome("Introdução a lógica de programação");
+        materiaDTO.setId(1L);
+        materiaDTO.setCodigo("ILP1");
+        materiaDTO.setFrequencia(1);
+        materiaDTO.setHoras(68);
+
+
+        Mockito.when(this.materiaRepository.findById(1L)).thenReturn(Optional.of(materiaEntity));
+        Mockito.when(this.materiaRepository.save(materiaEntity)).thenReturn(materiaEntity);
+
+        Boolean sucesso = this.materiaService.atualizar(materiaDTO);
+
+        assertTrue(sucesso);
+
+        Mockito.verify(this.materiaRepository, Mockito.times(1)).findById(1L);
+        Mockito.verify(this.materiaRepository, Mockito.times(1)).save(materiaEntity);
+    }
+
+    @Test
+    void testeExcluirSucesso() {
+        Mockito.when(this.materiaRepository.findById(1L)).thenReturn(Optional.of(materiaEntity));
+        Boolean sucesso = this.materiaService.excluir(1L);
+
+        assertTrue(sucesso);
+
+        Mockito.verify(this.materiaRepository, Mockito.times(1)).findById(1L);
+        Mockito.verify(this.materiaRepository, Mockito.times(0)).findByCodigo("ILP1");
+        Mockito.verify(this.materiaRepository, Mockito.times(1)).deleteById(1L);
+    }
     //CENARIOS DE THROW MATERIA EXCEPTION
 
     //CENARIOS DE THROW EXCEPTION
