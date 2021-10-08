@@ -5,8 +5,11 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.http.HttpStatus;
+import com.rasmoo.cliente.escola.gradecurricular.constant.MensagensConstant;
 import com.rasmoo.cliente.escola.gradecurricular.dto.MateriaDTO;
 import com.rasmoo.cliente.escola.gradecurricular.entity.MateriaEntity;
+import com.rasmoo.cliente.escola.gradecurricular.exception.MateriaException;
 import com.rasmoo.cliente.escola.gradecurricular.repository.IMateriaRepository;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -162,7 +165,94 @@ public class MateriaServiceUnitTest {
         Mockito.verify(this.materiaRepository, Mockito.times(0)).findByCodigo("ILP1");
         Mockito.verify(this.materiaRepository, Mockito.times(1)).deleteById(1L);
     }
+
     //CENARIOS DE THROW MATERIA EXCEPTION
+    @Test
+    void testeAtualizarThrowMateriaException() {
+        MateriaDTO materiaDTO = new MateriaDTO();
+        materiaDTO.setNome("Introdução a lógica de programação");
+        materiaDTO.setId(1L);
+        materiaDTO.setCodigo("ILP1");
+        materiaDTO.setFrequencia(1);
+        materiaDTO.setHoras(68);
+
+
+        Mockito.when(this.materiaRepository.findById(1L)).thenReturn(Optional.empty());
+
+        MateriaException materiaException;
+
+        materiaException = assertThrows(MateriaException.class, () -> {
+            this.materiaService.atualizar(materiaDTO);
+        });
+
+        assertEquals(HttpStatus.NOT_FOUND, materiaException.getHttpStatus());
+        assertEquals(MensagensConstant.ERRO_MATERIA_NAO_ENCONTRADA.getDescricao(), materiaException.getMessage());
+
+        Mockito.verify(this.materiaRepository, Mockito.times(1)).findById(1L);
+        Mockito.verify(this.materiaRepository, Mockito.times(0)).save(materiaEntity);
+    }
+
+    @Test
+    void testeExcluirThrowMateriaException() {
+        Mockito.when(this.materiaRepository.findById(1L)).thenReturn(Optional.empty());
+
+        MateriaException materiaException;
+
+        materiaException = assertThrows(MateriaException.class, () -> {
+            this.materiaService.excluir(1L);
+        });
+
+        assertEquals(HttpStatus.NOT_FOUND, materiaException.getHttpStatus());
+        assertEquals(MensagensConstant.ERRO_MATERIA_NAO_ENCONTRADA.getDescricao(), materiaException.getMessage());
+
+        Mockito.verify(this.materiaRepository, Mockito.times(1)).findById(1L);
+        Mockito.verify(this.materiaRepository, Mockito.times(0)).deleteById(1L);
+    }
+
+    @Test
+    void testeCadastrarComIdThrowMateriaException() {
+        MateriaDTO materiaDTO = new MateriaDTO();
+        materiaDTO.setNome("Introdução a lógica de programação");
+        materiaDTO.setId(1L);
+        materiaDTO.setCodigo("ILP1");
+        materiaDTO.setFrequencia(1);
+        materiaDTO.setHoras(68);
+
+        MateriaException materiaException;
+
+        materiaException = assertThrows(MateriaException.class, () -> {
+            this.materiaService.cadastrar(materiaDTO);
+        });
+
+        assertEquals(HttpStatus.BAD_REQUEST, materiaException.getHttpStatus());
+        assertEquals(MensagensConstant.ERRO_ID_INFORMADO.getDescricao(), materiaException.getMessage());
+
+        Mockito.verify(this.materiaRepository, Mockito.times(0)).findByCodigo("ILP1");
+        Mockito.verify(this.materiaRepository, Mockito.times(0)).save(materiaEntity);
+    }
+
+    @Test
+    void testeCadastrarComCodigoExistenteThrowMateriaException() {
+        MateriaDTO materiaDTO = new MateriaDTO();
+        materiaDTO.setNome("Introdução a lógica de programação");
+        materiaDTO.setCodigo("ILP1");
+        materiaDTO.setFrequencia(1);
+        materiaDTO.setHoras(68);
+
+        Mockito.when(this.materiaRepository.findByCodigo("ILP1")).thenReturn(materiaEntity);
+
+        MateriaException materiaException;
+
+        materiaException = assertThrows(MateriaException.class, () -> {
+            this.materiaService.cadastrar(materiaDTO);
+        });
+
+        assertEquals(HttpStatus.BAD_REQUEST, materiaException.getHttpStatus());
+        assertEquals(MensagensConstant.ERRO_MATERIA_CADASTRADA_ANTERIORMENTE.getDescricao(), materiaException.getMessage());
+
+        Mockito.verify(this.materiaRepository, Mockito.times(1)).findByCodigo("ILP1");
+        Mockito.verify(this.materiaRepository, Mockito.times(0)).save(materiaEntity);
+    }
 
     //CENARIOS DE THROW EXCEPTION
 }
