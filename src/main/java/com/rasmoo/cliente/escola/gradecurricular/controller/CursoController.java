@@ -56,7 +56,7 @@ public class CursoController {
     }
 
     @DeleteMapping("/{cursoId}")
-    public ResponseEntity<Response<Boolean>> excluirCurso( @PathVariable Long cursoId) {
+    public ResponseEntity<Response<Boolean>> excluirCurso(@PathVariable Long cursoId) {
         Response<Boolean> response = new Response<>();
         response.setData(cursoService.excluir(cursoId));
         response.setStatusCode(HttpStatus.OK.value());

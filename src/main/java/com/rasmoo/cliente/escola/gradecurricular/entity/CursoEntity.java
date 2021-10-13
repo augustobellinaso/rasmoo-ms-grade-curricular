@@ -14,6 +14,8 @@ import org.hibernate.annotations.GenericGenerator;
 @Table(name = "tb_curso")
 public class CursoEntity implements Serializable {
 
+    private static final long serialVersionUID = -5115709874529054925L;
+
     @Id
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @GeneratedValue(generator = "increment")
