@@ -35,6 +35,9 @@ public class MateriaControllerIntegratedTest {
     @Autowired
     private TestRestTemplate restTemplate;
 
+    private static final String USER = "rasmoo";
+    private static final String PASSWORD = "msgradecurricular";
+
     @BeforeEach
     public void init() {
         this.montaBaseDeDados();
@@ -70,6 +73,7 @@ public class MateriaControllerIntegratedTest {
     @Test
     void testListarMaterias() {
         ResponseEntity<Response<List<MateriaDTO>>> materias = restTemplate
+                .withBasicAuth(USER, PASSWORD)
                 .exchange("http://localhost:" + this.port + "/materia", HttpMethod.GET, null,
                         new ParameterizedTypeReference<Response<List<MateriaDTO>>>() {
                         });
@@ -82,6 +86,7 @@ public class MateriaControllerIntegratedTest {
     void testConsultarMateriaPorHoraMinima64() {
 
         ResponseEntity<Response<List<MateriaDTO>>> materias = restTemplate
+                .withBasicAuth(USER, PASSWORD)
                 .exchange("http://localhost:" + this.port + "/materia/horario-minimo/64", HttpMethod.GET, null,
                         new ParameterizedTypeReference<Response<List<MateriaDTO>>>() {
                         });
@@ -94,6 +99,7 @@ public class MateriaControllerIntegratedTest {
     void testConsultarMateriaPorFrequencia1() {
 
         ResponseEntity<Response<List<MateriaDTO>>> materias = restTemplate
+                .withBasicAuth(USER, PASSWORD)
                 .exchange("http://localhost:" + this.port + "/materia/frequencia/1", HttpMethod.GET, null,
                         new ParameterizedTypeReference<Response<List<MateriaDTO>>>() {
                         });
@@ -107,7 +113,9 @@ public class MateriaControllerIntegratedTest {
         List<MateriaEntity> materiasList = this.materiaRepository.findAll();
         Long id = materiasList.get(0).getId();
 
-        ResponseEntity<Response<MateriaDTO>> materias = restTemplate.exchange(
+        ResponseEntity<Response<MateriaDTO>> materias = restTemplate
+                .withBasicAuth(USER, PASSWORD)
+                .exchange(
                 "http://localhost:" + this.port + "/materia/" + id, HttpMethod.GET, null,
                 new ParameterizedTypeReference<Response<MateriaDTO>>() {
                 });
@@ -127,7 +135,9 @@ public class MateriaControllerIntegratedTest {
 
         HttpEntity<MateriaEntity> request = new HttpEntity<>(materia);
 
-        ResponseEntity<Response<Boolean>> materias = restTemplate.exchange(
+        ResponseEntity<Response<Boolean>> materias = restTemplate
+                .withBasicAuth(USER, PASSWORD)
+                .exchange(
                 "http://localhost:" + this.port + "/materia/", HttpMethod.PUT, request,
                 new ParameterizedTypeReference<Response<Boolean>>() {
                 });
@@ -148,7 +158,9 @@ public class MateriaControllerIntegratedTest {
 
         HttpEntity<MateriaEntity> request = new HttpEntity<>(m4);
 
-        ResponseEntity<Response<Boolean>> materias = restTemplate.exchange(
+        ResponseEntity<Response<Boolean>> materias = restTemplate
+                .withBasicAuth(USER, PASSWORD)
+                .exchange(
                 "http://localhost:" + this.port + "/materia/", HttpMethod.POST, request,
                 new ParameterizedTypeReference<Response<Boolean>>() {
                 });
@@ -165,7 +177,9 @@ public class MateriaControllerIntegratedTest {
         List<MateriaEntity> materiasList = this.materiaRepository.findAll();
         Long id = materiasList.get(0).getId();
 
-        ResponseEntity<Response<Boolean>> materias = restTemplate.exchange(
+        ResponseEntity<Response<Boolean>> materias = restTemplate
+                .withBasicAuth(USER, PASSWORD)
+                .exchange(
                 "http://localhost:" + this.port + "/materia/" + id, HttpMethod.DELETE, null,
                 new ParameterizedTypeReference<Response<Boolean>>() {
                 });

@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rasmoo.cliente.escola.gradecurricular.model.CursoModel;
@@ -30,6 +31,9 @@ public class CursoControllerUnitTest {
     @Autowired
     private ObjectMapper mapper;
 
+    private static final String USER = "rasmoo";
+    private static final String PASSWORD = "msgradecurricular";
+
     @Test
     void testCadastrarCurso() throws Exception {
         CursoModel cursoModel = new CursoModel();
@@ -40,6 +44,7 @@ public class CursoControllerUnitTest {
         Mockito.when(this.cursoService.cadastrar(cursoModel)).thenReturn(true);
 
         mvc.perform(post("/curso")
+                        .with(SecurityMockMvcRequestPostProcessors.httpBasic(USER, PASSWORD))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(cursoModel)))
                 .andExpect(status().isOk())
@@ -50,13 +55,15 @@ public class CursoControllerUnitTest {
     @Test
     void testListarCursos() throws Exception {
         mvc.perform(get("/curso")
-                .accept(MediaType.APPLICATION_JSON))
+                        .with(SecurityMockMvcRequestPostProcessors.httpBasic(USER, PASSWORD))
+                        .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 
     @Test
     void testConsultarCursoPorId() throws Exception {
         mvc.perform(get("/curso/{id}", 1)
+                        .with(SecurityMockMvcRequestPostProcessors.httpBasic(USER, PASSWORD))
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
@@ -71,6 +78,7 @@ public class CursoControllerUnitTest {
         Mockito.when(this.cursoService.atualizar(cursoModel)).thenReturn(true);
 
         mvc.perform(put("/curso")
+                        .with(SecurityMockMvcRequestPostProcessors.httpBasic(USER, PASSWORD))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(cursoModel)))
                 .andExpect(status().isOk())
@@ -80,6 +88,7 @@ public class CursoControllerUnitTest {
     @Test
     void testExcluirCurso() throws Exception {
         mvc.perform(delete("/curso/{id}", 1)
+                        .with(SecurityMockMvcRequestPostProcessors.httpBasic(USER, PASSWORD))
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
