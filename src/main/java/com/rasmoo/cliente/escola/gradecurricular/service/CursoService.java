@@ -54,7 +54,7 @@ public class CursoService implements ICursoService{
         } catch (CursoException c) {
             throw c;
         } catch (Exception e) {
-            throw e;
+            throw new CursoException(MensagensConstant.ERRO_GENERICO.getDescricao(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -94,7 +94,11 @@ public class CursoService implements ICursoService{
     @Override
     @CachePut(unless = "#result.size()<3")
     public List<CursoEntity> listarCursos() {
-        return this.cursoRepository.findAll();
+        try {
+            return this.cursoRepository.findAll();
+        } catch (Exception e) {
+            throw new CursoException(MensagensConstant.ERRO_GENERICO.getDescricao(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     private Boolean cadastrarOuAtualizar(CursoModel cursoModel) {
