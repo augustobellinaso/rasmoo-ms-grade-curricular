@@ -1,4 +1,4 @@
-package com.rasmoo.cliente.escola.gradecurricular.controller;
+package com.rasmoo.cliente.escola.gradecurricular.v1.controller;
 
 import java.util.List;
 import javax.validation.Valid;
@@ -8,10 +8,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.rasmoo.cliente.escola.gradecurricular.config.SwaggerConfig;
-import com.rasmoo.cliente.escola.gradecurricular.constant.HyperLinkConstant;
-import com.rasmoo.cliente.escola.gradecurricular.dto.MateriaDTO;
-import com.rasmoo.cliente.escola.gradecurricular.model.Response;
-import com.rasmoo.cliente.escola.gradecurricular.service.IMateriaService;
+import com.rasmoo.cliente.escola.gradecurricular.v1.constant.HyperLinkConstant;
+import com.rasmoo.cliente.escola.gradecurricular.v1.dto.MateriaDTO;
+import com.rasmoo.cliente.escola.gradecurricular.v1.model.Response;
+import com.rasmoo.cliente.escola.gradecurricular.v1.service.IMateriaService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -19,7 +19,7 @@ import io.swagger.annotations.ApiResponses;
 
 @Api(tags = SwaggerConfig.MATERIA)
 @RestController
-@RequestMapping(path = "/materia")
+@RequestMapping(path = "/v1/materia")
 public class MateriaController {
 
     @Autowired

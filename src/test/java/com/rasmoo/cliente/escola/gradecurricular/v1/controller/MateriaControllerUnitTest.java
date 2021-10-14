@@ -1,4 +1,4 @@
-package com.rasmoo.cliente.escola.gradecurricular.controller;
+package com.rasmoo.cliente.escola.gradecurricular.v1.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -14,9 +14,9 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import com.rasmoo.cliente.escola.gradecurricular.dto.MateriaDTO;
-import com.rasmoo.cliente.escola.gradecurricular.model.Response;
-import com.rasmoo.cliente.escola.gradecurricular.service.IMateriaService;
+import com.rasmoo.cliente.escola.gradecurricular.v1.dto.MateriaDTO;
+import com.rasmoo.cliente.escola.gradecurricular.v1.model.Response;
+import com.rasmoo.cliente.escola.gradecurricular.v1.service.IMateriaService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -62,7 +62,7 @@ public class MateriaControllerUnitTest {
         ResponseEntity<Response<List<MateriaDTO>>> materias = restTemplate
                 .withBasicAuth(USER, PASSWORD)
                 .exchange(
-                "http://localhost:" + this.port + "/materia/", HttpMethod.GET, null,
+                "http://localhost:" + this.port + "/v1/materia/", HttpMethod.GET, null,
                 new ParameterizedTypeReference<Response<List<MateriaDTO>>>() {
                 });
         assertNotNull(materias.getBody().getData());
@@ -76,7 +76,7 @@ public class MateriaControllerUnitTest {
         ResponseEntity<Response<MateriaDTO>> materias = restTemplate
                 .withBasicAuth(USER, PASSWORD)
                 .exchange(
-                "http://localhost:" + this.port + "/materia/1", HttpMethod.GET, null,
+                "http://localhost:" + this.port + "/v1/materia/1", HttpMethod.GET, null,
                 new ParameterizedTypeReference<Response<MateriaDTO>>() {
                 });
         assertNotNull(materias.getBody().getData());
@@ -92,7 +92,7 @@ public class MateriaControllerUnitTest {
         ResponseEntity<Response<Boolean>> materias = restTemplate
                 .withBasicAuth(USER, PASSWORD)
                 .exchange(
-                "http://localhost:" + this.port + "/materia/", HttpMethod.POST, request,
+                "http://localhost:" + this.port + "/v1/materia/", HttpMethod.POST, request,
                 new ParameterizedTypeReference<Response<Boolean>>() {
                 });
         assertNotNull(materias.getBody().getData());
@@ -108,7 +108,7 @@ public class MateriaControllerUnitTest {
         ResponseEntity<Response<Boolean>> materias = restTemplate
                 .withBasicAuth(USER, PASSWORD)
                 .exchange(
-                "http://localhost:" + this.port + "/materia/", HttpMethod.PUT, request,
+                "http://localhost:" + this.port + "/v1/materia/", HttpMethod.PUT, request,
                 new ParameterizedTypeReference<Response<Boolean>>() {
                 });
         assertNotNull(materias.getBody().getData());
@@ -122,7 +122,7 @@ public class MateriaControllerUnitTest {
         ResponseEntity<Response<Boolean>> materias = restTemplate
                 .withBasicAuth(USER, PASSWORD)
                 .exchange(
-                "http://localhost:" + this.port + "/materia/1", HttpMethod.DELETE, null,
+                "http://localhost:" + this.port + "/v1/materia/1", HttpMethod.DELETE, null,
                 new ParameterizedTypeReference<Response<Boolean>>() {
                 });
         assertNotNull(materias.getBody().getData());
@@ -136,7 +136,7 @@ public class MateriaControllerUnitTest {
         ResponseEntity<Response<List<MateriaDTO>>> materias = restTemplate
                 .withBasicAuth(USER, PASSWORD)
                 .exchange(
-                "http://localhost:" + this.port + "/materia/horario-minimo/64", HttpMethod.GET, null,
+                "http://localhost:" + this.port + "/v1/materia/horario-minimo/64", HttpMethod.GET, null,
                 new ParameterizedTypeReference<Response<List<MateriaDTO>>>() {
                 });
         assertNotNull(materias.getBody().getData());
@@ -150,7 +150,7 @@ public class MateriaControllerUnitTest {
         ResponseEntity<Response<List<MateriaDTO>>> materias = restTemplate
                 .withBasicAuth(USER, PASSWORD)
                 .exchange(
-                "http://localhost:" + this.port + "/materia/frequencia/1", HttpMethod.GET, null,
+                "http://localhost:" + this.port + "/v1/materia/frequencia/1", HttpMethod.GET, null,
                 new ParameterizedTypeReference<Response<List<MateriaDTO>>>() {
                 });
         assertNotNull(materias.getBody().getData());

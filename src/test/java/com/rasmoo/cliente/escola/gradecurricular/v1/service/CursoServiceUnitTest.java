@@ -1,4 +1,4 @@
-package com.rasmoo.cliente.escola.gradecurricular.service;
+package com.rasmoo.cliente.escola.gradecurricular.v1.service;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.times;
@@ -7,11 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.http.HttpStatus;
-import com.rasmoo.cliente.escola.gradecurricular.constant.MensagensConstant;
+import com.rasmoo.cliente.escola.gradecurricular.v1.constant.MensagensConstant;
 import com.rasmoo.cliente.escola.gradecurricular.entity.CursoEntity;
 import com.rasmoo.cliente.escola.gradecurricular.entity.MateriaEntity;
-import com.rasmoo.cliente.escola.gradecurricular.exception.CursoException;
-import com.rasmoo.cliente.escola.gradecurricular.model.CursoModel;
+import com.rasmoo.cliente.escola.gradecurricular.v1.exception.CursoException;
+import com.rasmoo.cliente.escola.gradecurricular.v1.model.CursoModel;
 import com.rasmoo.cliente.escola.gradecurricular.repository.ICursoRepository;
 import com.rasmoo.cliente.escola.gradecurricular.repository.IMateriaRepository;
 import org.junit.jupiter.api.BeforeAll;

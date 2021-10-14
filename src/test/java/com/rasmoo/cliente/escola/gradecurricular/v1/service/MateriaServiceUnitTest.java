@@ -1,4 +1,4 @@
-package com.rasmoo.cliente.escola.gradecurricular.service;
+package com.rasmoo.cliente.escola.gradecurricular.v1.service;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -6,10 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.http.HttpStatus;
-import com.rasmoo.cliente.escola.gradecurricular.constant.MensagensConstant;
-import com.rasmoo.cliente.escola.gradecurricular.dto.MateriaDTO;
+import com.rasmoo.cliente.escola.gradecurricular.v1.constant.MensagensConstant;
+import com.rasmoo.cliente.escola.gradecurricular.v1.dto.MateriaDTO;
 import com.rasmoo.cliente.escola.gradecurricular.entity.MateriaEntity;
-import com.rasmoo.cliente.escola.gradecurricular.exception.MateriaException;
+import com.rasmoo.cliente.escola.gradecurricular.v1.exception.MateriaException;
 import com.rasmoo.cliente.escola.gradecurricular.repository.IMateriaRepository;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -55,7 +55,7 @@ public class MateriaServiceUnitTest {
         assertNotNull(listMateriaDto);
         assertEquals("ILP1", listMateriaDto.get(0).getCodigo());
         assertEquals(1, listMateriaDto.get(0).getId());
-        assertEquals("/materia/1", listMateriaDto.get(0).getLinks().getRequiredLink("self").getHref());
+        assertEquals("/v1/materia/1", listMateriaDto.get(0).getLinks().getRequiredLink("self").getHref());
         assertEquals(1, listMateriaDto.size());
 
         Mockito.verify(this.materiaRepository, Mockito.times(1)).findAll();

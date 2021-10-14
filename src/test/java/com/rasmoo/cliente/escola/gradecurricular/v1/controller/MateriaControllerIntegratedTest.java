@@ -1,4 +1,4 @@
-package com.rasmoo.cliente.escola.gradecurricular.controller;
+package com.rasmoo.cliente.escola.gradecurricular.v1.controller;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -12,9 +12,9 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import com.rasmoo.cliente.escola.gradecurricular.dto.MateriaDTO;
+import com.rasmoo.cliente.escola.gradecurricular.v1.dto.MateriaDTO;
 import com.rasmoo.cliente.escola.gradecurricular.entity.MateriaEntity;
-import com.rasmoo.cliente.escola.gradecurricular.model.Response;
+import com.rasmoo.cliente.escola.gradecurricular.v1.model.Response;
 import com.rasmoo.cliente.escola.gradecurricular.repository.IMateriaRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -74,7 +74,7 @@ public class MateriaControllerIntegratedTest {
     void testListarMaterias() {
         ResponseEntity<Response<List<MateriaDTO>>> materias = restTemplate
                 .withBasicAuth(USER, PASSWORD)
-                .exchange("http://localhost:" + this.port + "/materia", HttpMethod.GET, null,
+                .exchange("http://localhost:" + this.port + "/v1/materia", HttpMethod.GET, null,
                         new ParameterizedTypeReference<Response<List<MateriaDTO>>>() {
                         });
         assertNotNull(materias.getBody().getData());
@@ -87,7 +87,7 @@ public class MateriaControllerIntegratedTest {
 
         ResponseEntity<Response<List<MateriaDTO>>> materias = restTemplate
                 .withBasicAuth(USER, PASSWORD)
-                .exchange("http://localhost:" + this.port + "/materia/horario-minimo/64", HttpMethod.GET, null,
+                .exchange("http://localhost:" + this.port + "/v1/materia/horario-minimo/64", HttpMethod.GET, null,
                         new ParameterizedTypeReference<Response<List<MateriaDTO>>>() {
                         });
         assertNotNull(materias.getBody().getData());
@@ -100,7 +100,7 @@ public class MateriaControllerIntegratedTest {
 
         ResponseEntity<Response<List<MateriaDTO>>> materias = restTemplate
                 .withBasicAuth(USER, PASSWORD)
-                .exchange("http://localhost:" + this.port + "/materia/frequencia/1", HttpMethod.GET, null,
+                .exchange("http://localhost:" + this.port + "/v1/materia/frequencia/1", HttpMethod.GET, null,
                         new ParameterizedTypeReference<Response<List<MateriaDTO>>>() {
                         });
         assertNotNull(materias.getBody().getData());
@@ -116,7 +116,7 @@ public class MateriaControllerIntegratedTest {
         ResponseEntity<Response<MateriaDTO>> materias = restTemplate
                 .withBasicAuth(USER, PASSWORD)
                 .exchange(
-                "http://localhost:" + this.port + "/materia/" + id, HttpMethod.GET, null,
+                "http://localhost:" + this.port + "/v1/materia/" + id, HttpMethod.GET, null,
                 new ParameterizedTypeReference<Response<MateriaDTO>>() {
                 });
         assertNotNull(materias.getBody().getData());
@@ -138,7 +138,7 @@ public class MateriaControllerIntegratedTest {
         ResponseEntity<Response<Boolean>> materias = restTemplate
                 .withBasicAuth(USER, PASSWORD)
                 .exchange(
-                "http://localhost:" + this.port + "/materia/", HttpMethod.PUT, request,
+                "http://localhost:" + this.port + "/v1/materia/", HttpMethod.PUT, request,
                 new ParameterizedTypeReference<Response<Boolean>>() {
                 });
 
@@ -161,7 +161,7 @@ public class MateriaControllerIntegratedTest {
         ResponseEntity<Response<Boolean>> materias = restTemplate
                 .withBasicAuth(USER, PASSWORD)
                 .exchange(
-                "http://localhost:" + this.port + "/materia/", HttpMethod.POST, request,
+                "http://localhost:" + this.port + "/v1/materia/", HttpMethod.POST, request,
                 new ParameterizedTypeReference<Response<Boolean>>() {
                 });
 
@@ -180,7 +180,7 @@ public class MateriaControllerIntegratedTest {
         ResponseEntity<Response<Boolean>> materias = restTemplate
                 .withBasicAuth(USER, PASSWORD)
                 .exchange(
-                "http://localhost:" + this.port + "/materia/" + id, HttpMethod.DELETE, null,
+                "http://localhost:" + this.port + "/v1/materia/" + id, HttpMethod.DELETE, null,
                 new ParameterizedTypeReference<Response<Boolean>>() {
                 });
 
